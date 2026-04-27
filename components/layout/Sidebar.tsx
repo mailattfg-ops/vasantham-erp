@@ -31,7 +31,9 @@ const GROUPS = [
       { href: '/pos', label: 'POS / Cash Counter', icon: Store, roles: ['admin', 'cashier'] },
       { href: '/inventory', label: 'Inventory', icon: Package, roles: ['admin', 'staff'] },
       { href: '/sales', label: 'Sales', icon: ShoppingBag, roles: ['admin'] },
+      { href: '/sales/returns', label: 'Sales Returns', icon: RotateCcw, roles: ['admin'] },
       { href: '/purchase', label: 'Purchases', icon: Truck, roles: ['admin'] },
+      { href: '/purchase/returns', label: 'Purchase Returns', icon: RotateCcw, roles: ['admin'] },
     ]
   },
   {
