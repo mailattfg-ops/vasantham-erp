@@ -66,9 +66,9 @@ export const SEED_VENDORS: import('@/types').Vendor[] = [
 ]
 
 export const SEED_EMPLOYEES: Employee[] = [
-  { id: 'emp-01', user_id: 'usr-admin', name: 'Admin User', phone: '9400000001', email: 'admin@vasantham.com', role: 'admin', join_date: '2020-01-01', is_active: true, created_at: '2020-01-01T00:00:00Z', updated_at: '2020-01-01T00:00:00Z' },
-  { id: 'emp-02', user_id: 'usr-cashier', name: 'Priya Menon', phone: '9400000002', email: 'priya@vasantham.com', role: 'cashier', join_date: '2022-06-01', is_active: true, created_at: '2022-06-01T00:00:00Z', updated_at: '2022-06-01T00:00:00Z' },
-  { id: 'emp-03', user_id: 'usr-staff', name: 'Anoop Kumar', phone: '9400000003', email: 'anoop@vasantham.com', role: 'staff', join_date: '2023-01-15', is_active: true, created_at: '2023-01-15T00:00:00Z', updated_at: '2023-01-15T00:00:00Z' },
+  { id: 'emp-01', user_id: 'usr-admin', name: 'Admin User', phone: '9400000001', email: 'admin@vasantham.com', role: 'admin', department: 'Administration', join_date: '2020-01-01', is_active: true, password: 'admin123', created_at: '2020-01-01T00:00:00Z', updated_at: '2020-01-01T00:00:00Z' },
+  { id: 'emp-02', user_id: 'usr-cashier', name: 'Priya Menon', phone: '9400000002', email: 'priya@vasantham.com', role: 'cashier', department: 'Sales', join_date: '2022-06-01', is_active: true, password: 'cashier123', created_at: '2022-06-01T00:00:00Z', updated_at: '2022-06-01T00:00:00Z' },
+  { id: 'emp-03', user_id: 'usr-staff', name: 'Anoop Kumar', phone: '9400000003', email: 'anoop@vasantham.com', role: 'staff', department: 'Inventory', join_date: '2023-01-15', is_active: true, password: 'staff123', created_at: '2023-01-15T00:00:00Z', updated_at: '2023-01-15T00:00:00Z' },
 ]
 
 export const SEED_ACCOUNTS: ChartOfAccount[] = [
