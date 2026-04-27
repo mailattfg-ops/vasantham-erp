@@ -43,9 +43,19 @@ export default function Header() {
   const router = useRouter()
   const { user, logout } = useAuth()
   const [showProfile, setShowProfile] = useState(false)
+  const [showNotifications, setShowNotifications] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [showSearchResults, setShowSearchResults] = useState(false)
 
   const title = BREADCRUMBS[pathname] ?? 'Vasantham ERP'
   const segments = pathname.split('/').filter(Boolean)
+
+  // Mock Notifications
+  const notifications = [
+    { id: 1, title: 'Low Stock Alert', msg: 'Pure Cotton Shirting is below 20m', time: '5m ago', type: 'warn' },
+    { id: 2, title: 'New Sale', msg: 'Sale #1024 completed by Priya', time: '12m ago', type: 'info' },
+    { id: 3, title: 'Vendor Payment', msg: 'Balance due for Surat Silk House', time: '1h ago', type: 'error' },
+  ]
 
   return (
     <header className="flex items-center justify-between px-8 bg-[#0f1115] border-b border-white/5 flex-shrink-0 z-40 relative shadow-2xl" style={{ height: '70px' }}>
@@ -67,24 +77,87 @@ export default function Header() {
 
       {/* Right Actions */}
       <div className="flex items-center gap-5">
-        {/* Quick Search */}
-        <div className="hidden md:flex items-center bg-white/5 border border-white/10 rounded-full px-4 py-1.5 focus-within:border-primary/50 transition-all group">
-          <Search className="w-3.5 h-3.5 text-gray-500 group-focus-within:text-primary" />
-          <input 
-            type="text" 
-            placeholder="Search anything..." 
-            className="bg-transparent border-none text-xs text-white placeholder:text-gray-600 focus:ring-0 ml-2 w-32 lg:w-48"
-          />
+        {/* Global Search */}
+        <div className="hidden md:block relative">
+          <div className="flex items-center bg-white/5 border border-white/10 rounded-full px-4 py-1.5 focus-within:border-primary/50 transition-all group">
+            <Search className="w-3.5 h-3.5 text-gray-500 group-focus-within:text-primary" />
+            <input 
+              type="text" 
+              placeholder="Search items, sales..." 
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value)
+                setShowSearchResults(e.target.value.length > 0)
+              }}
+              onFocus={() => searchQuery.length > 0 && setShowSearchResults(true)}
+              className="bg-transparent border-none text-xs text-white placeholder:text-gray-600 focus:ring-0 ml-2 w-32 lg:w-48"
+            />
+          </div>
+
+          {showSearchResults && (
+            <>
+              <div className="fixed inset-0" onClick={() => setShowSearchResults(false)} />
+              <div className="absolute top-full mt-3 right-0 w-80 bg-[#16191f] border border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden p-2 animate-in fade-in zoom-in-95 duration-100">
+                <div className="px-3 py-2 text-[10px] uppercase font-bold text-gray-500 border-b border-white/5 mb-1">Search Results</div>
+                <div className="max-h-60 overflow-y-auto">
+                  <div className="p-2 hover:bg-white/5 rounded-xl cursor-pointer flex items-center gap-3 group">
+                    <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                      <Search className="w-3.5 h-3.5" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-white font-medium">"{searchQuery}" in Inventory</p>
+                      <p className="text-[10px] text-gray-500">Quick search result...</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="h-6 w-px bg-white/5 mx-1" />
 
         {/* Action Icons */}
         <div className="flex items-center gap-1">
-          <button className="w-9 h-9 rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 transition-all relative">
-            <Bell className="w-4 h-4" />
-            <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-primary rounded-full border-2 border-[#0f1115]" />
-          </button>
+          <div className="relative">
+            <button 
+              onClick={() => setShowNotifications(!showNotifications)}
+              className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all relative ${showNotifications ? 'bg-primary text-white' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
+            >
+              <Bell className="w-4 h-4" />
+              <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-red-500 rounded-full border-2 border-[#0f1115]" />
+            </button>
+
+            {showNotifications && (
+              <>
+                <div className="fixed inset-0" onClick={() => setShowNotifications(false)} />
+                <div className="absolute top-full mt-3 right-0 w-72 bg-[#16191f] border border-white/10 rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2">
+                  <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
+                    <span className="text-xs font-bold text-white">Notifications</span>
+                    <span className="text-[9px] bg-primary/10 text-primary px-1.5 py-0.5 rounded font-bold uppercase">3 New</span>
+                  </div>
+                  <div className="max-h-80 overflow-y-auto">
+                    {notifications.map(n => (
+                      <div key={n.id} className="p-4 border-b border-white/5 hover:bg-white/5 transition-all cursor-pointer group">
+                        <div className="flex items-start gap-3">
+                          <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${n.type === 'warn' ? 'bg-amber-500' : n.type === 'error' ? 'bg-red-500' : 'bg-blue-500'}`} />
+                          <div>
+                            <p className="text-xs font-bold text-white group-hover:text-primary transition-colors">{n.title}</p>
+                            <p className="text-[10px] text-gray-400 mt-0.5 leading-relaxed">{n.msg}</p>
+                            <p className="text-[9px] text-gray-600 mt-2 font-medium">{n.time}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <button className="w-full py-3 text-[10px] font-bold text-gray-500 hover:text-white transition-colors bg-white/5 uppercase tracking-widest">
+                    View All Reminders
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+          
           <Link href="/settings">
             <button className="w-9 h-9 rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 transition-all">
               <Settings className="w-4 h-4" />
