@@ -4,7 +4,7 @@
 'use client'
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import { Plus, Search, UserPlus, Mail, Phone, MapPin, Briefcase } from 'lucide-react'
+import { Plus, Search, UserPlus, Mail, Phone, MapPin, Briefcase, Users } from 'lucide-react'
 import { PageHeader, Button, Card, SearchInput, StatusBadge, Select } from '@/components/ui'
 import { getAll } from '@/lib/db/store'
 import { formatDate } from '@/lib/utils/date'
