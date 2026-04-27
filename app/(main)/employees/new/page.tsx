@@ -185,7 +185,7 @@ export default function NewEmployeePage() {
 
           <Button 
             className="w-full py-6 text-lg" 
-            onClick={handleSubmit} 
+            type="submit"
             disabled={loading}
           >
             <Save className="w-5 h-5 mr-2" /> Save Employee
