@@ -219,9 +219,13 @@ export default function Header() {
                   <p className="text-[10px] text-text-secondary mt-0.5">{user?.email}</p>
                 </div>
                 <div className="p-2">
-                  <button className="w-full flex items-center gap-3 px-3 py-2 text-xs text-text-secondary hover:text-text-primary hover:bg-gray-50 rounded-xl transition-all">
+                  <Link 
+                    href="/settings/profile"
+                    onClick={() => setShowProfile(false)}
+                    className="w-full flex items-center gap-3 px-3 py-2 text-xs text-text-secondary hover:text-text-primary hover:bg-gray-50 rounded-xl transition-all cursor-pointer"
+                  >
                     <User className="w-3.5 h-3.5" /> Profile Settings
-                  </button>
+                  </Link>
                   <button 
                     onClick={() => { logout(); router.push('/auth/login') }}
                     className="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-red-500 hover:bg-red-50 rounded-xl transition-all mt-1"
