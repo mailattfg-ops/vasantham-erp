@@ -40,3 +40,6 @@ export function formatNumber(paise: number): string {
     maximumFractionDigits: 2,
   }).format(rupees)
 }
+export function formatCurrency(amount: number, currency = 'INR'): string {
+  return new Intl.NumberFormat('en-IN', { style: 'currency', currency }).format(amount)
+}
