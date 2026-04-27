@@ -120,7 +120,8 @@ export default function LoginPage() {
             </div>
 
             <button type="submit" disabled={loading}
-              className="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-60">
+              style={{ backgroundColor: '#1a56db', color: '#ffffff' }}
+              className="w-full font-semibold py-3 rounded-lg flex items-center justify-center gap-2 transition-opacity disabled:opacity-60 hover:opacity-90 text-base">
               {loading ? <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> : null}
               {loading ? 'Signing in…' : 'Sign In'}
               {!loading && <ChevronRight className="w-4 h-4" />}
