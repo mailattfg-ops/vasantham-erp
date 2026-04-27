@@ -287,66 +287,50 @@ export default function NewPurchasePage() {
         </div>
 
         <div className="space-y-6">
-          <div className="sticky top-24 space-y-6">
-            <Card className="p-6 shadow-sm border-gray-100">
-              <h3 className="text-base font-bold text-text-primary border-b border-gray-50 pb-3 mb-4">Vendor Details</h3>
-              <div className="space-y-4">
-                <Select label="Select Vendor *" value={vendorId} onChange={e => setVendorId(e.target.value)}>
-                  <option value="">-- Choose Vendor --</option>
-                  {vendors.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
-                </Select>
-                
-                <Input label="Purchase Date *" type="date" value={date} onChange={e => setDate(e.target.value)} />
-              </div>
-            </Card>
-
-            <Card className="p-6 shadow-md border-primary/10">
-              <h3 className="text-base font-bold text-text-primary border-b border-gray-50 pb-3 mb-4">Summary</h3>
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm text-text-secondary">
-                  <span>Total Items</span>
-                  <span className="font-bold">{lines.reduce((s, l) => s + l.quantity, 0)}</span>
-                </div>
-                <div className="flex justify-between text-sm text-text-secondary">
-                  <span>Subtotal</span>
-                  <span className="amount font-medium">{formatINR(totals.subtotal)}</span>
-                </div>
-                <div className="flex justify-between text-sm text-text-secondary">
-                  <span>CGST</span>
-                  <span className="amount font-medium text-amber-600">{formatINR(totals.cgst)}</span>
-                </div>
-                <div className="flex justify-between text-sm text-text-secondary">
-                  <span>SGST</span>
-                  <span className="amount font-medium text-amber-600">{formatINR(totals.sgst)}</span>
-                </div>
-                
-                <div className="border-t border-gray-100 pt-4 mt-4">
-                  <div className="flex justify-between items-end">
-                    <span className="font-bold text-gray-500 text-xs uppercase tracking-widest">Total Value</span>
-                    <span className="amount text-2xl font-bold text-primary">{formatINR(totals.total)}</span>
-                  </div>
-                </div>
-              </div>
-
-              <Button 
-                className={`w-full mt-8 py-6 text-base font-bold shadow-lg transition-all duration-300 ${
-                  lines.length > 0 && vendorId 
-                    ? 'bg-primary hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98]' 
-                    : 'bg-gray-100 text-gray-400 cursor-not-allowed opacity-50'
-                }`} 
-                onClick={handleSave} 
-                disabled={lines.length === 0 || !vendorId}
-              >
-                <Save className="w-5 h-5 mr-2" /> Save & Update Stock
-              </Button>
+          <Card className="p-6">
+            <h3 className="text-base font-semibold text-text-primary border-b border-border pb-3 mb-4">Vendor Details</h3>
+            <div className="space-y-4">
+              <Select label="Select Vendor *" value={vendorId} onChange={e => setVendorId(e.target.value)}>
+                <option value="">-- Choose Vendor --</option>
+                {vendors.map(v => <option key={v.id} value={v.id}>{v.name}</option>)}
+              </Select>
               
-              {(lines.length === 0 || !vendorId) && (
-                <p className="text-[10px] text-center text-red-400 mt-3 font-medium animate-pulse">
-                  {!vendorId ? 'Please select a vendor' : 'Add at least one item to save'}
-                </p>
-              )}
-            </Card>
-          </div>
+              <Input label="Purchase Date *" type="date" value={date} onChange={e => setDate(e.target.value)} />
+            </div>
+          </Card>
+
+          <Card className="p-6">
+            <h3 className="text-base font-semibold text-text-primary border-b border-border pb-3 mb-4">Summary</h3>
+            <div className="space-y-3">
+              <div className="flex justify-between text-sm text-text-secondary">
+                <span>Total Items</span>
+                <span>{lines.reduce((s, l) => s + l.quantity, 0)}</span>
+              </div>
+              <div className="flex justify-between text-sm text-text-secondary">
+                <span>Subtotal</span>
+                <span className="amount">{formatINR(totals.subtotal)}</span>
+              </div>
+              <div className="flex justify-between text-sm text-text-secondary">
+                <span>CGST</span>
+                <span className="amount">{formatINR(totals.cgst)}</span>
+              </div>
+              <div className="flex justify-between text-sm text-text-secondary">
+                <span>SGST</span>
+                <span className="amount">{formatINR(totals.sgst)}</span>
+              </div>
+              
+              <div className="border-t border-border pt-3 mt-3">
+                <div className="flex justify-between font-bold text-lg text-text-primary">
+                  <span>Total Value</span>
+                  <span className="amount text-primary">{formatINR(totals.total)}</span>
+                </div>
+              </div>
+            </div>
+
+            <Button className="w-full mt-6" size="lg" onClick={handleSave} disabled={lines.length === 0 || !vendorId}>
+              <Save className="w-4 h-4 mr-2" /> Save & Update Stock
+            </Button>
+          </Card>
         </div>
       </div>
     </div>
