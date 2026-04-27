@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useAuth } from '@/lib/auth/context'
 import { Bell, Search, Settings, ChevronRight, User, LogOut } from 'lucide-react'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 const BREADCRUMBS: Record<string, string> = {
   '/dashboard': 'Dashboard',
@@ -38,6 +39,7 @@ const BREADCRUMBS: Record<string, string> = {
 
 export default function Header() {
   const pathname = usePathname()
+  const router = useRouter()
   const { user, logout } = useAuth()
   const [showProfile, setShowProfile] = useState(false)
 
