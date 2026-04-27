@@ -1,12 +1,12 @@
 /**
- * Premium Top Header — Dark Theme matching Sidebar
+ * Premium Top Header — Light Theme, Mobile Responsive
  */
 'use client'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/lib/auth/context'
 import { getAll } from '@/lib/db/store'
-import { Bell, Search, Settings, ChevronRight, User, LogOut } from 'lucide-react'
+import { Bell, Search, Settings, ChevronRight, User, LogOut, Menu } from 'lucide-react'
 import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -39,7 +39,11 @@ const BREADCRUMBS: Record<string, string> = {
   '/settings/users': 'User Management',
 }
 
-export default function Header() {
+interface HeaderProps {
+  onMenuClick?: () => void
+}
+
+export default function Header({ onMenuClick }: HeaderProps) {
   const pathname = usePathname()
   const router = useRouter()
   const { user, logout } = useAuth()
@@ -75,25 +79,36 @@ export default function Header() {
   ]
 
   return (
-    <header className="flex items-center justify-between px-8 bg-white border-b border-gray-100 flex-shrink-0 z-40 relative shadow-sm" style={{ height: '70px' }}>
-      {/* Breadcrumb & Title */}
-      <div className="flex flex-col">
-        <div className="flex items-center gap-2 text-[10px] uppercase font-bold tracking-[0.1em] text-gray-400 mb-0.5">
-          <span className="hover:text-primary transition-colors cursor-pointer">ERP</span>
-          {segments.map((seg, i) => (
-            <span key={i} className="flex items-center gap-2">
-              <ChevronRight className="w-2.5 h-2.5 text-gray-200" />
-              <span className="text-gray-500">{seg.replace(/-/g, ' ')}</span>
-            </span>
-          ))}
+    <header className="flex items-center justify-between px-4 lg:px-8 bg-white border-b border-gray-100 flex-shrink-0 z-40 relative shadow-sm" style={{ height: '60px' }}>
+      {/* Left: Hamburger (mobile) + Breadcrumb */}
+      <div className="flex items-center gap-3">
+        {/* Hamburger — mobile only */}
+        <button
+          onClick={onMenuClick}
+          className="lg:hidden w-9 h-9 flex items-center justify-center text-gray-500 hover:text-text-primary hover:bg-gray-50 rounded-xl transition-all"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+
+        {/* Breadcrumb & Title */}
+        <div className="flex flex-col">
+          <div className="hidden sm:flex items-center gap-2 text-[10px] uppercase font-bold tracking-[0.1em] text-gray-400 mb-0.5">
+            <span className="hover:text-primary transition-colors cursor-pointer">ERP</span>
+            {segments.map((seg, i) => (
+              <span key={i} className="flex items-center gap-2">
+                <ChevronRight className="w-2.5 h-2.5 text-gray-200" />
+                <span className="text-gray-500">{seg.replace(/-/g, ' ')}</span>
+              </span>
+            ))}
+          </div>
+          <h1 className="text-base lg:text-lg font-serif font-medium text-text-primary tracking-wide">
+            {title} <span className="text-primary ml-1 text-xs font-sans font-bold">●</span>
+          </h1>
         </div>
-        <h1 className="text-lg font-serif font-medium text-text-primary tracking-wide">
-          {title} <span className="text-primary ml-1 text-xs font-sans font-bold">●</span>
-        </h1>
       </div>
 
       {/* Right Actions */}
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-2 lg:gap-5">
         {/* Global Search */}
         <div className="hidden md:block relative">
           <div className="flex items-center bg-gray-50 border border-gray-100 rounded-full px-4 py-1.5 focus-within:border-primary/50 transition-all group">
