@@ -8,7 +8,7 @@ import { useAuth } from '@/lib/auth/context'
 import {
   LayoutDashboard, ShoppingCart, Package, ShoppingBag,
   Truck, BookOpen, Users, BarChart2, Settings,
-  LogOut, Store, Hexagon, ChevronRight
+  LogOut, Store, Hexagon, ChevronRight, RotateCcw
 } from 'lucide-react'
 
 interface NavItem {
@@ -31,9 +31,7 @@ const GROUPS = [
       { href: '/pos', label: 'POS / Cash Counter', icon: Store, roles: ['admin', 'cashier'] },
       { href: '/inventory', label: 'Inventory', icon: Package, roles: ['admin', 'staff'] },
       { href: '/sales', label: 'Sales', icon: ShoppingBag, roles: ['admin'] },
-      { href: '/sales/returns', label: 'Sales Returns', icon: RotateCcw, roles: ['admin'] },
       { href: '/purchase', label: 'Purchases', icon: Truck, roles: ['admin'] },
-      { href: '/purchase/returns', label: 'Purchase Returns', icon: RotateCcw, roles: ['admin'] },
     ]
   },
   {
