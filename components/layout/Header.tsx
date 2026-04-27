@@ -3,6 +3,7 @@
  */
 'use client'
 import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 import { useAuth } from '@/lib/auth/context'
 import { Bell, Search, Settings, ChevronRight, User, LogOut } from 'lucide-react'
 import { useState } from 'react'
@@ -84,9 +85,11 @@ export default function Header() {
             <Bell className="w-4 h-4" />
             <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-primary rounded-full border-2 border-[#0f1115]" />
           </button>
-          <button className="w-9 h-9 rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 transition-all">
-            <Settings className="w-4 h-4" />
-          </button>
+          <Link href="/settings">
+            <button className="w-9 h-9 rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+              <Settings className="w-4 h-4" />
+            </button>
+          </Link>
         </div>
 
         <div className="h-6 w-px bg-white/5 mx-1" />
@@ -120,7 +123,7 @@ export default function Header() {
                   </button>
                   <button 
                     onClick={() => { logout(); router.push('/auth/login') }}
-                    className="w-full flex items-center gap-3 px-3 py-2 text-xs text-danger hover:bg-danger/5 rounded-xl transition-all mt-1"
+                    className="w-full flex items-center gap-3 px-3 py-2 text-xs font-bold text-red-400 hover:bg-red-500/10 rounded-xl transition-all mt-1"
                   >
                     <LogOut className="w-3.5 h-3.5" /> Sign Out
                   </button>
