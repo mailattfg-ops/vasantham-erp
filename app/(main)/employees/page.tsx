@@ -5,15 +5,24 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { Plus, Search, UserPlus, Mail, Phone, MapPin, Briefcase, Users, MoreVertical, Edit2, Trash2 } from 'lucide-react'
-import { PageHeader, Button, Card, SearchInput, StatusBadge, Select } from '@/components/ui'
-import { getAll } from '@/lib/db/store'
+import { PageHeader, Button, Card, SearchInput, StatusBadge, Select, ConfirmDialog } from '@/components/ui'
+import { getAll, softDelete } from '@/lib/db/store'
 import { formatDate } from '@/lib/utils/date'
 import type { Employee } from '@/types'
+import { toast } from 'sonner'
 
 export default function EmployeesPage() {
-  const employees = useMemo(() => getAll<Employee>('employees').filter(e => !e.deleted_at), [])
+  const [employees, setEmployees] = useState<Employee[]>([])
   const [search, setSearch] = useState('')
   const [deptFilter, setDeptFilter] = useState('all')
+  const [deleteId, setDeleteId] = useState<string | null>(null)
+
+  // Load employees
+  const load = () => {
+    setEmployees(getAll<Employee>('employees').filter(e => !e.deleted_at))
+  }
+
+  useMemo(() => load(), [])
 
   const departments = useMemo(() => {
     const set = new Set(employees.map(e => e.department).filter(Boolean))
@@ -28,6 +37,14 @@ export default function EmployeesPage() {
       return matchSearch && matchDept
     })
   }, [employees, search, deptFilter])
+
+  const handleDelete = () => {
+    if (!deleteId) return
+    softDelete('employees', deleteId)
+    toast.success('Employee removed successfully')
+    setDeleteId(null)
+    load()
+  }
 
   return (
     <div className="space-y-6">
@@ -125,10 +142,10 @@ export default function EmployeesPage() {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => toast.info('Employee editing is coming soon!')}>
                         <Edit2 className="w-3.5 h-3.5" />
                       </Button>
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-danger hover:bg-danger/5">
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-danger hover:bg-danger/5" onClick={() => setDeleteId(emp.id)}>
                         <Trash2 className="w-3.5 h-3.5" />
                       </Button>
                     </div>
@@ -149,6 +166,15 @@ export default function EmployeesPage() {
           </div>
         )}
       </Card>
+
+      <ConfirmDialog 
+        open={!!deleteId}
+        onClose={() => setDeleteId(null)}
+        onConfirm={handleDelete}
+        title="Remove Employee"
+        message="Are you sure you want to remove this employee? This will deactivate their login and record."
+      />
     </div>
   )
 }
+
