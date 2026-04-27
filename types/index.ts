@@ -35,9 +35,12 @@ export interface Employee {
   phone: string
   email: string
   role: UserRole
+  department: string
+  salary?: number // paise
   address?: string
   join_date: string
   is_active: boolean
+  password?: string // only used during creation in mock mode
   created_at: string
   updated_at: string
   deleted_at?: string

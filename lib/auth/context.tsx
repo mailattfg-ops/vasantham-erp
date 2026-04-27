@@ -42,13 +42,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const login = async (email: string, password: string) => {
-    const found = DEMO_USERS[email.toLowerCase()]
-    if (!found || found.password !== password)
-      return { error: 'Invalid email or password' }
-    const { password: _, ...authUser } = found
-    setUser(authUser)
-    localStorage.setItem('vas_auth_user', JSON.stringify(authUser))
-    return {}
+    const normalizedEmail = email.toLowerCase()
+    
+    // 1. Check hardcoded demo users
+    const found = DEMO_USERS[normalizedEmail]
+    if (found && found.password === password) {
+      const { password: _, ...authUser } = found
+      setUser(authUser)
+      localStorage.setItem('vas_auth_user', JSON.stringify(authUser))
+      return {}
+    }
+
+    // 2. Check dynamic employees from localStorage
+    try {
+      const raw = localStorage.getItem('vas_employees')
+      const employees = raw ? JSON.parse(raw) : []
+      const emp = employees.find((e: any) => e.email.toLowerCase() === normalizedEmail && !e.deleted_at)
+      
+      if (emp && emp.password === password) {
+        const authUser: AuthUser = {
+          id: emp.user_id,
+          email: emp.email,
+          role: emp.role,
+          name: emp.name
+        }
+        setUser(authUser)
+        localStorage.setItem('vas_auth_user', JSON.stringify(authUser))
+        return {}
+      }
+    } catch (e) {
+      console.error('Auth lookup failed', e)
+    }
+
+    return { error: 'Invalid email or password' }
   }
 
   const logout = () => {
