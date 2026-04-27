@@ -142,9 +142,11 @@ export default function EmployeesPage() {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => toast.info('Employee editing is coming soon!')}>
-                        <Edit2 className="w-3.5 h-3.5" />
-                      </Button>
+                      <Link href={`/employees/${emp.id}`}>
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </Button>
+                      </Link>
                       <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-danger hover:bg-danger/5" onClick={() => setDeleteId(emp.id)}>
                         <Trash2 className="w-3.5 h-3.5" />
                       </Button>
