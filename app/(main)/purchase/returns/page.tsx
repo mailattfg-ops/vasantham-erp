@@ -7,7 +7,7 @@ import { Truck, RotateCcw, Search, Plus, Filter, Calendar } from 'lucide-react'
 import { PageHeader, Button, Card, SearchInput, StatusBadge, Select } from '@/components/ui'
 import { getAll } from '@/lib/db/store'
 import { formatDate } from '@/lib/utils/date'
-import { formatCurrency } from '@/lib/utils/currency'
+import { formatINR } from '@/lib/utils/currency'
 
 export default function PurchaseReturnsPage() {
   const [search, setSearch] = useState('')
@@ -58,7 +58,7 @@ export default function PurchaseReturnsPage() {
           </div>
           <div>
             <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Debit Note Total</p>
-            <p className="text-2xl font-bold text-text-primary mt-0.5">{formatCurrency(655000)}</p>
+            <p className="text-2xl font-bold text-text-primary mt-0.5">{formatINR(655000)}</p>
           </div>
         </Card>
 
@@ -122,7 +122,7 @@ export default function PurchaseReturnsPage() {
                     {item.items} Units
                   </td>
                   <td className="px-6 py-4 font-bold text-sm text-text-primary">
-                    {formatCurrency(item.amount)}
+                    {formatINR(item.amount)}
                   </td>
                   <td className="px-6 py-4">
                     <StatusBadge status={item.status as any} />
