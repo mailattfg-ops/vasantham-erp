@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/lib/auth/context'
 import { Bell, Search, Settings, ChevronRight, User, LogOut } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 
 const BREADCRUMBS: Record<string, string> = {
