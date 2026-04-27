@@ -50,6 +50,22 @@ export default function Header() {
   const title = BREADCRUMBS[pathname] ?? 'Vasantham ERP'
   const segments = pathname.split('/').filter(Boolean)
 
+  // Real Global Search
+  const allItems = useMemo(() => getAll<any>('items'), [])
+  const allEmployees = useMemo(() => getAll<any>('employees'), [])
+
+  const searchResults = useMemo(() => {
+    if (!searchQuery) return []
+    const q = searchQuery.toLowerCase()
+    const items = allItems.filter(i => i.name.toLowerCase().includes(q) || i.sku.toLowerCase().includes(q)).slice(0, 5)
+    const emps = allEmployees.filter(e => e.name.toLowerCase().includes(q)).slice(0, 3)
+    
+    return [
+      ...items.map(i => ({ id: i.id, name: i.name, sub: i.sku, type: 'Item', link: `/inventory/${i.id}` })),
+      ...emps.map(e => ({ id: e.id, name: e.name, sub: e.department, type: 'Staff', link: `/employees/${e.id}` }))
+    ]
+  }, [searchQuery, allItems, allEmployees])
+
   // Mock Notifications
   const notifications = [
     { id: 1, title: 'Low Stock Alert', msg: 'Pure Cotton Shirting is below 20m', time: '5m ago', type: 'warn' },
@@ -83,7 +99,7 @@ export default function Header() {
             <Search className="w-3.5 h-3.5 text-gray-400 group-focus-within:text-primary" />
             <input 
               type="text" 
-              placeholder="Search items, sales..." 
+              placeholder="Search items, staff..." 
               value={searchQuery}
               onChange={(e) => {
                 setSearchQuery(e.target.value)
@@ -100,15 +116,27 @@ export default function Header() {
               <div className="absolute top-full mt-3 right-0 w-80 bg-white border border-gray-100 rounded-2xl shadow-2xl z-50 overflow-hidden p-2 animate-in fade-in zoom-in-95 duration-100">
                 <div className="px-3 py-2 text-[10px] uppercase font-bold text-gray-400 border-b border-gray-50 mb-1">Search Results</div>
                 <div className="max-h-60 overflow-y-auto">
-                  <div className="p-2 hover:bg-gray-50 rounded-xl cursor-pointer flex items-center gap-3 group">
-                    <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                      <Search className="w-3.5 h-3.5" />
+                  {searchResults.map(res => (
+                    <Link 
+                      key={`${res.type}-${res.id}`} 
+                      href={res.link}
+                      onClick={() => { setShowSearchResults(false); setSearchQuery('') }}
+                      className="p-2 hover:bg-gray-50 rounded-xl cursor-pointer flex items-center gap-3 group transition-colors"
+                    >
+                      <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                        <Search className="w-3.5 h-3.5" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-text-primary font-bold leading-tight">{res.name}</p>
+                        <p className="text-[10px] text-text-secondary mt-0.5">{res.sub} <span className="mx-1 text-gray-200">|</span> <span className="text-primary font-bold uppercase">{res.type}</span></p>
+                      </div>
+                    </Link>
+                  ))}
+                  {searchResults.length === 0 && (
+                    <div className="p-8 text-center">
+                      <p className="text-xs text-text-secondary">No results found for "{searchQuery}"</p>
                     </div>
-                    <div>
-                      <p className="text-xs text-text-primary font-medium">"{searchQuery}" in Inventory</p>
-                      <p className="text-[10px] text-text-secondary">Quick search result...</p>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </>
